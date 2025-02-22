@@ -12,7 +12,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 try:
-    client = MongoClient(os.environ.get("MONGO_KEY"))
+    client = MongoClient(os.environ.get("MONGO_KEY"), tls=True)
     logging.info("Connected to MongoDB")
 except Exception as e:
     logging.critical({f"Exception":"MongoDb could not connect: {e}"})
@@ -66,7 +66,10 @@ def getIdByCode():
     collection = db["NbaTeams"]
 
     logging.info("Trying to find an element via teamCode")
-    team = collection.find_one({"code": teamCode})
+    try:
+        team = collection.find_one({"code": teamCode})
+    except Exception as e:
+        logging.error({"Exception":f"Mongo caused an exception: {e}"}) 
     logging.info("Found something")
 
     if team == None or team == []:
