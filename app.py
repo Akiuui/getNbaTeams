@@ -3,11 +3,14 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 from fetchers import fetchTeam
 from formatters import formatTeams
+from flask_cors import CORS
 import os
 import logging
 
 load_dotenv()
 app = Flask(__name__)
+CORS(app)
+# logging.info(app.url_map)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
